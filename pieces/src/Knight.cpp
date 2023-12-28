@@ -1,39 +1,27 @@
 #include "../include/Knight.h"
 
-Knight::Knight(PieceColor color, int16_t pos_h, int16_t pos_w)
+Knight::Knight(PieceColor piece_color, int16_t pos_row, int16_t pos_column)
 {
     Knight::piece_type_ = PieceType::KNIGHT;
-    Knight::color_ = color;
-    setPosition(pos_h, pos_w);
+    Knight::piece_color_ = piece_color;
+    setPosition(pos_row, pos_column);
 }
 
 Knight::~Knight()
 {
 }
 
-bool Knight::canMove(int16_t pos_h, int16_t pos_w, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const
+bool Knight::canMove(int16_t pos_row, int16_t pos_column, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const
 {
-    if (position_.first + 2 == pos_h)
+    if (piece_position_.first + 2 == pos_row || piece_position_.first - 2 == pos_row)
     {
-        if (position_.second + 1 == pos_w || position_.second - 1 == pos_w)
+        if (piece_position_.second + 1 == pos_column || piece_position_.second - 1 == pos_column)
             return true;
     }
 
-    if (position_.first - 2 == pos_h)
+    if (piece_position_.first + 1 == pos_row || piece_position_.first - 1 == pos_row)
     {
-        if (position_.second + 1 == pos_w || position_.second - 1 == pos_w)
-            return true;
-    }
-
-    if (position_.first + 1 == pos_h)
-    {
-        if (position_.second - 2 == pos_w || position_.second + 2 == pos_w)
-            return true;
-    }
-
-    if (position_.first - 1 == pos_h)
-    {
-        if (position_.second + 2 == pos_w || position_.second - 2 == pos_w)
+        if (piece_position_.second - 2 == pos_column || piece_position_.second + 2 == pos_column)
             return true;
     }
 

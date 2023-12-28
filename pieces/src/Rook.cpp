@@ -1,60 +1,53 @@
 #include "../include/Rook.h"
-#include <iostream>
 
-Rook::Rook(PieceColor color, int16_t pos_h, int16_t pos_w)
+Rook::Rook(PieceColor piece_color, int16_t pos_row, int16_t pos_column)
 {
     Rook::piece_type_ = PieceType::ROOK;
-    Rook::color_ = color;
-    setPosition(pos_h, pos_w);
+    Rook::piece_color_ = piece_color;
+    setPosition(pos_row, pos_column);
 }
 
 Rook::~Rook()
 {
 }
 
-bool Rook::canMove(int16_t pos_h, int16_t pos_w, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const
+// Refactore this function
+bool Rook::canMove(int16_t pos_row, int16_t pos_column, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const
 {
-    bool aux = true;
+    bool ret = true;
 
-    if (pos_h == position_.first && pos_w == position_.second)
+    if (pos_column > piece_position_.second && pos_row == piece_position_.first)
     {
-        return false;
+        for (int column = piece_position_.second + 1; column < pos_column; column++)
+        {
+            ret = ret && !configuration_bool[pos_row][column];
+        }
+        return ret;
     }
-    if (pos_h == position_.first)
+    if (pos_column < piece_position_.second && pos_row == piece_position_.first)
     {
-        if (pos_w > position_.second)
+        for (int column = piece_position_.second - 1; column > pos_column; column--)
         {
-            for (int i = position_.second + 1; i < pos_w; i++)
-            {
-                aux = aux && !configuration_bool[pos_h][i];
-            }
+            ret = ret && !configuration_bool[pos_row][column];
         }
-        else
-        {
-            for (int i = position_.second - 1; i > pos_w; i--)
-            {
-                aux = aux && !configuration_bool[pos_h][i];
-            }
-        }
-        return aux;
+        return ret;
     }
-    if (pos_w == position_.second)
+
+    if (pos_row > piece_position_.first && pos_column == piece_position_.second)
     {
-        if (pos_h > position_.first)
+        for (int row = piece_position_.first + 1; row < pos_row; row++)
         {
-            for (int i = position_.first + 1; i < pos_h; i++)
-            {
-                aux = aux && !configuration_bool[i][pos_w];
-            }
+            ret = ret && !configuration_bool[row][pos_column];
         }
-        else
+        return ret;
+    }
+    if (pos_row < piece_position_.first && pos_column == piece_position_.second)
+    {
+        for (int row = piece_position_.first - 1; row > pos_row; row--)
         {
-            for (int i = position_.first - 1; i > pos_h; i--)
-            {
-                aux = aux && !configuration_bool[i][pos_w];
-            }
+            ret = ret && !configuration_bool[row][pos_column];
         }
-        return aux;
+        return ret;
     }
     return false;
 }

@@ -6,10 +6,10 @@
 class Knight : public Piece
 {
 public:
-    Knight(PieceColor color, int16_t pos_h, int16_t pos_w);
+    Knight(PieceColor piece_color, int16_t pos_row, int16_t pos_column);
     ~Knight();
 
-    bool canMove(int16_t pos_h, int16_t pos_w, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const override;
+    bool canMove(int16_t pos_row, int16_t pos_column, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const override;
 };
 
-#endif
+#endif /* KNIGHT_H */

@@ -1,11 +1,9 @@
 #ifndef PIECE_H
 #define PIECE_H
 
-#include <memory>
-#include <string>
-#include <utility>
+#include <utility> // make_pair, pair
 
-#define BOARD_SIZE 8
+const int BOARD_SIZE = 8;
 
 enum class PieceColor
 {
@@ -29,14 +27,14 @@ public:
     virtual ~Piece() = default;
 
     PieceType piece_type_;
-    PieceColor color_;
-    std::pair<int16_t, int16_t> position_;
+    PieceColor piece_color_;
+    std::pair<int16_t, int16_t> piece_position_;
 
-    virtual bool canMove(int16_t pos_h, int16_t pos_w, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const = 0;
-    void setPosition(int16_t pos_h, int16_t pos_w)
+    virtual bool canMove(int16_t pos_row, int16_t pos_column, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const = 0;
+    void setPosition(int16_t pos_row, int16_t pos_column)
     {
-        position_ = std::make_pair(pos_h, pos_w);
+        piece_position_ = std::make_pair(pos_row, pos_column);
     }
 };
 
-#endif
+#endif /* PIECE_H */

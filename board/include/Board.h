@@ -1,11 +1,9 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include <iostream>
-#include <map>
-#include <memory>
-#include <vector>
-#include <windows.h>
+#include <iostream>  // cin, cout, endl
+#include <string>    // getline
+#include <windows.h> // bunch of things
 
 #include "../../pieces/include/Bishop.h"
 #include "../../pieces/include/King.h"
@@ -15,8 +13,6 @@
 #include "../../pieces/include/Queen.h"
 #include "../../pieces/include/Rook.h"
 
-#define BOARD_SIZE 8
-
 class Board
 {
 public:
@@ -24,14 +20,16 @@ public:
     ~Board();
 
     std::shared_ptr<Piece> configuration[BOARD_SIZE][BOARD_SIZE];
-    bool configuration_bool[BOARD_SIZE][BOARD_SIZE];
+    bool configuration_bool[BOARD_SIZE][BOARD_SIZE] = {{false}};
 
-    void initalConfiguration();
-    void updateBoard(std::pair<int16_t, int16_t> old_, std::pair<int16_t, int16_t> new_);
+    void setInitalConfiguration();
+    void updateBoard(std::pair<int16_t, int16_t> actual_position, std::pair<int16_t, int16_t> destination_position);
+    bool isValidMove(std::pair<int16_t, int16_t> actual_position, std::pair<int16_t, int16_t> destination_position);
+    void promotePawn(std::shared_ptr<Piece> pawn);
     void printBoard();
-    void SetConsoleColour(WORD *Attributes, DWORD Colour);
-    void ResetConsoleColour(WORD Attributes);
+    void setConsoleColour(WORD *Attributes, DWORD Colour);
+    void resetConsoleColour(WORD Attributes);
     std::string typeToString(PieceType type);
 };
 
-#endif
+#endif /* BOARD_H */
