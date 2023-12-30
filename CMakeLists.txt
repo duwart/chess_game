@@ -3,17 +3,17 @@ cmake_minimum_required(VERSION 3.28.0)
 project(Chess_Game "CXX")
 
 file(GLOB_RECURSE sources
-    "${CMAKE_CURRENT_SOURCE_DIR}/pieces/src/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/board/src/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/chess_game/pieces/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/chess_game/board/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/chess_game/main.cpp"
 )
 
 add_executable(${PROJECT_NAME} ${sources})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
-    "${CMAKE_CURRENT_SOURCE_DIR}/pieces/include"
-    "${CMAKE_CURRENT_SOURCE_DIR}/board/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/chess_game/pieces/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/chess_game/board/include"
 )
 
 set_target_properties(${PROJECT_NAME}
