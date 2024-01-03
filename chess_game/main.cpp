@@ -6,9 +6,9 @@
 #include "board/include/Board.h"
 #include <sstream>
 
-std::pair<int, int> cast_to_pair(std::string str)
+std::pair<int16_t, int16_t> cast_to_pair(std::string str)
 {
-    std::map<std::string, int> map_str_int{{"a", 0}, {"b", 1}, {"c", 2}, {"d", 3}, {"e", 4}, {"f", 5}, {"g", 6}, {"h", 7}, {"8", 0}, {"7", 1}, {"6", 2}, {"5", 3}, {"4", 4}, {"3", 5}, {"2", 6}, {"1", 7}};
+    std::map<std::string, int16_t> map_str_int{{"a", 0}, {"b", 1}, {"c", 2}, {"d", 3}, {"e", 4}, {"f", 5}, {"g", 6}, {"h", 7}, {"8", 0}, {"7", 1}, {"6", 2}, {"5", 3}, {"4", 4}, {"3", 5}, {"2", 6}, {"1", 7}};
 
     std::string s;
 
@@ -109,6 +109,8 @@ int main()
         }
 
         auto new_pos = cast_to_pair(var);
-        board->updateBoard(old_pos, new_pos);
+        Position pos_old = Position{old_pos.first, old_pos.second};
+        Position pos_new = Position{new_pos.first, new_pos.second};
+        board->updateBoard(pos_old, pos_new);
     }
 }

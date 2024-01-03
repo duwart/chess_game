@@ -23,9 +23,10 @@ public:
     bool configuration_bool[BOARD_SIZE][BOARD_SIZE] = {{false}};
 
     void setInitalConfiguration();
-    void updateBoard(std::pair<int16_t, int16_t> actual_position, std::pair<int16_t, int16_t> destination_position);
-    bool isValidMove(std::pair<int16_t, int16_t> actual_position, std::pair<int16_t, int16_t> destination_position);
+    void updateBoard(Position actual_position, Position destination_position);
+    bool isValidMove(Position actual_position, Position destination_position);
     void promotePawn(std::shared_ptr<Piece> pawn);
+    void addPieceToBoard(PieceColor color, PieceType type, Position position_on_board);
     void printBoard();
     void setConsoleColour(WORD *Attributes, DWORD Colour);
     void resetConsoleColour(WORD Attributes);

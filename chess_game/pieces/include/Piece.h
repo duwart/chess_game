@@ -21,6 +21,12 @@ enum class PieceType
     ROOK
 };
 
+struct Position
+{
+    int16_t row;
+    int16_t column;
+};
+
 class Piece
 {
 public:
@@ -28,12 +34,13 @@ public:
 
     PieceType piece_type_;
     PieceColor piece_color_;
-    std::pair<int16_t, int16_t> piece_position_;
+    Position piece_position_;
 
-    virtual bool canMove(int16_t pos_row, int16_t pos_column, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const = 0;
-    void setPosition(int16_t pos_row, int16_t pos_column)
+    virtual bool canMove(Position destination, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const = 0;
+
+    void setPosition(Position position)
     {
-        piece_position_ = std::make_pair(pos_row, pos_column);
+        piece_position_ = position;
     }
 };
 

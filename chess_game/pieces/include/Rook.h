@@ -6,10 +6,12 @@
 class Rook : public Piece
 {
 public:
-    Rook(PieceColor piece_color, int16_t pos_row, int16_t pos_column);
+    Rook(PieceColor piece_color, Position piece_position);
     ~Rook();
 
-    bool canMove(int16_t pos_row, int16_t pos_column, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const override;
+    bool isInHorizontalRange(int16_t pos_column, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const;
+    bool isInVerticalRange(int16_t pos_row, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const;
+    bool canMove(Position destination, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const override;
 };
 
 #endif /* ROOK_H */

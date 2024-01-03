@@ -6,10 +6,10 @@
 class Pawn : public Piece
 {
 public:
-    Pawn(PieceColor piece_color, int16_t pos_row, int16_t pos_column);
+    Pawn(PieceColor piece_color, Position piece_position);
     ~Pawn();
 
-    bool canMove(int16_t pos_row, int16_t pos_column, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const override;
+    bool canMove(Position destination, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const override;
 
 private:
     bool isFirstMove() const;
