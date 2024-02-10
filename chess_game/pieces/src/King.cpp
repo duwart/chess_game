@@ -13,7 +13,6 @@ King::~King()
 
 bool King::canMove(Position destination, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const
 {
-    // change variable name
     bool in_range = piece_position_.column + 1 == destination.column || piece_position_.column - 1 == destination.column || piece_position_.column == destination.column;
 
     if (piece_position_.row + 1 == destination.row && in_range)

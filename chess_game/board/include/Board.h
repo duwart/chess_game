@@ -21,10 +21,17 @@ public:
 
     std::shared_ptr<Piece> configuration[BOARD_SIZE][BOARD_SIZE];
     bool configuration_bool[BOARD_SIZE][BOARD_SIZE] = {{false}};
+    std::shared_ptr<Piece> black_king_;
+    std::shared_ptr<Piece> white_king_;
+    bool is_black_king_in_check_ = false;
+    bool is_white_king_in_check_ = false;
 
     void setInitalConfiguration();
+    bool hasPieceInPosition(Position position);
     void updateBoard(Position actual_position, Position destination_position);
     bool isValidMove(Position actual_position, Position destination_position);
+    bool canMoveToPosition(Position actual_position, Position destination_position);
+    bool isKingInCheck(Position destination_position, PieceColor king_color);
     void promotePawn(std::shared_ptr<Piece> pawn);
     void addPieceToBoard(PieceColor color, PieceType type, Position position_on_board);
     void printBoard();

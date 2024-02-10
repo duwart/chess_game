@@ -25,6 +25,10 @@ struct Position
 {
     int16_t row;
     int16_t column;
+    bool isEqual(Position pos)
+    {
+        return (row == pos.row) && (column == pos.column);
+    }
 };
 
 class Piece
@@ -35,6 +39,7 @@ public:
     PieceType piece_type_;
     PieceColor piece_color_;
     Position piece_position_;
+    bool in_check_;
 
     virtual bool canMove(Position destination, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const = 0;
 

@@ -11,6 +11,17 @@ Rook::~Rook()
 {
 }
 
+bool Rook::canMove(Position destination, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const
+{
+    if (destination.row == piece_position_.row)
+        return isInHorizontalRange(destination.column, configuration_bool);
+
+    if (destination.column == piece_position_.column)
+        return isInVerticalRange(destination.row, configuration_bool);
+
+    return false;
+}
+
 bool Rook::isInHorizontalRange(int16_t pos_column, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const
 {
     auto step_direction = (pos_column > piece_position_.column) ? 1 : -1;
@@ -34,15 +45,4 @@ bool Rook::isInVerticalRange(int16_t pos_row, bool configuration_bool[BOARD_SIZE
     }
 
     return true;
-}
-
-bool Rook::canMove(Position destination, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const
-{
-    if (destination.row == piece_position_.row)
-        return isInHorizontalRange(destination.column, configuration_bool);
-
-    if (destination.column == piece_position_.column)
-        return isInVerticalRange(destination.row, configuration_bool);
-
-    return false;
 }
