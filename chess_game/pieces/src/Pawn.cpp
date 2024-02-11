@@ -1,24 +1,17 @@
-#include "../include/Pawn.h"
+#include "../include/Pawn.hpp"
 
 const int FIRST_POSITION_BLACK_PAWN = 1;
 const int FIRST_POSITION_WHITE_PAWN = 6;
 
-Pawn::Pawn(PieceColor piece_color, Position piece_position)
-{
-    Pawn::piece_type_ = PieceType::PAWN;
-    Pawn::piece_color_ = piece_color;
-    setPosition(piece_position);
-}
+Pawn::Pawn(PieceColor piece_color, Position piece_position) : Piece(piece_color, piece_position, PieceType::PAWN) {}
 
-Pawn::~Pawn()
-{
-}
+Pawn::~Pawn() {}
 
-bool Pawn::canMove(Position destination, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const
+bool Pawn::canMove(Position destination) const
 {
     int move_direction = piece_color_ == PieceColor::WHITE ? -1 : 1;
 
-    if (!configuration_bool[destination.row][destination.column])
+    if (!configuration_board[destination.row][destination.column])
     {
         if (piece_position_.column == destination.column)
         {
@@ -29,7 +22,8 @@ bool Pawn::canMove(Position destination, bool configuration_bool[BOARD_SIZE][BOA
                 return true;
         }
     }
-    else
+
+    if (configuration_board[destination.row][destination.column])
     {
         if (piece_position_.column + 1 == destination.column || piece_position_.column - 1 == destination.column)
         {

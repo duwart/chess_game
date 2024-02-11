@@ -1,17 +1,10 @@
-#include "../include/Bishop.h"
+#include "../include/Bishop.hpp"
 
-Bishop::Bishop(PieceColor piece_color, Position piece_position)
-{
-    Bishop::piece_type_ = PieceType::BISHOP;
-    Bishop::piece_color_ = piece_color;
-    setPosition(piece_position);
-}
+Bishop::Bishop(PieceColor piece_color, Position piece_position) : Piece(piece_color, piece_position, PieceType::BISHOP) {}
 
-Bishop::~Bishop()
-{
-}
+Bishop::~Bishop() {}
 
-bool Bishop::canMove(Position destination, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const
+bool Bishop::canMove(Position destination) const
 {
 
     int rowDirection = (destination.row > piece_position_.row) ? 1 : -1;
@@ -26,7 +19,7 @@ bool Bishop::canMove(Position destination, bool configuration_bool[BOARD_SIZE][B
         {
             return true;
         }
-        if (configuration_bool[checkRow][checkColumn])
+        if (configuration_board[checkRow][checkColumn])
         {
             return false;
         }

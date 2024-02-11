@@ -1,17 +1,10 @@
-#include "../include/Knight.h"
+#include "../include/Knight.hpp"
 
-Knight::Knight(PieceColor piece_color, Position piece_position)
-{
-    Knight::piece_type_ = PieceType::KNIGHT;
-    Knight::piece_color_ = piece_color;
-    setPosition(piece_position);
-}
+Knight::Knight(PieceColor piece_color, Position piece_position) : Piece(piece_color, piece_position, PieceType::KNIGHT) {}
 
-Knight::~Knight()
-{
-}
+Knight::~Knight() {}
 
-bool Knight::canMove(Position destination, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const
+bool Knight::canMove(Position destination) const
 {
     if (piece_position_.row + 2 == destination.row || piece_position_.row - 2 == destination.row)
     {

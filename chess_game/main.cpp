@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <set>
-#include "board/include/Board.h"
+#include "board/include/Board.hpp"
 #include <sstream>
 
 std::pair<int16_t, int16_t> cast_to_pair(std::string str)
@@ -60,7 +60,7 @@ bool validate_var(std::string str)
 
 int main()
 {
-    Board *board = new Board();
+    Board board;
 
     bool flag = true;
     std::string var = "";
@@ -68,7 +68,7 @@ int main()
     while (flag)
     {
         // system("cls");
-        board->printBoard();
+        board.printBoard();
         std::cout << "Choose a piece (/q to quit):  ";
         std::getline(std::cin, var);
         std::cout << var << std::endl;
@@ -111,6 +111,8 @@ int main()
         auto new_pos = cast_to_pair(var);
         Position pos_old = Position{old_pos.first, old_pos.second};
         Position pos_new = Position{new_pos.first, new_pos.second};
-        board->updateBoard(pos_old, pos_new);
+        board.updateBoard(pos_old, pos_new);
     }
+
+    return 0;
 }

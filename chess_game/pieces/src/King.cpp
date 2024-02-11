@@ -1,17 +1,13 @@
-#include "../include/King.h"
+#include "../include/King.hpp"
 
-King::King(PieceColor piece_color, Position piece_position)
+King::King(PieceColor piece_color, Position piece_position) : Piece(piece_color, piece_position, PieceType::KING)
 {
-    King::piece_type_ = PieceType::KING;
-    King::piece_color_ = piece_color;
-    setPosition(piece_position);
+    bool in_check_ = false;
 }
 
-King::~King()
-{
-}
+King::~King() {}
 
-bool King::canMove(Position destination, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const
+bool King::canMove(Position destination) const
 {
     bool in_range = piece_position_.column + 1 == destination.column || piece_position_.column - 1 == destination.column || piece_position_.column == destination.column;
 
@@ -25,4 +21,13 @@ bool King::canMove(Position destination, bool configuration_bool[BOARD_SIZE][BOA
         return true;
 
     return false;
+}
+
+bool King::isInCheck()
+{
+    return in_check_;
+}
+void King::setInCheck(bool in_check)
+{
+    King::in_check_ = in_check;
 }

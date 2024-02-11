@@ -1,6 +1,4 @@
-#ifndef PIECE_H
-#define PIECE_H
-
+#pragma once
 #include <utility> // make_pair, pair
 
 const int BOARD_SIZE = 8;
@@ -33,20 +31,21 @@ struct Position
 
 class Piece
 {
-public:
-    virtual ~Piece() = default;
-
+protected:
     PieceType piece_type_;
     PieceColor piece_color_;
     Position piece_position_;
-    bool in_check_;
+    static bool configuration_board[BOARD_SIZE][BOARD_SIZE];
 
-    virtual bool canMove(Position destination, bool configuration_bool[BOARD_SIZE][BOARD_SIZE]) const = 0;
+    void setColor(PieceColor piece_color);
 
-    void setPosition(Position position)
-    {
-        piece_position_ = position;
-    }
+public:
+    Piece(PieceColor piece_color, Position piece_position, PieceType piece_type);
+    virtual ~Piece() = default;
+
+    virtual bool canMove(Position destination) const = 0;
+    PieceType getPieceType();
+    PieceColor getPieceColor();
+    Position getPiecePosition();
+    void setPosition(Position position);
 };
-
-#endif /* PIECE_H */
