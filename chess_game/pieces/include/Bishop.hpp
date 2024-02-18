@@ -1,7 +1,8 @@
 #pragma once
+
 #include "Piece.hpp"
 
-class Bishop : public Piece
+class Bishop final : public Piece
 {
 public:
     Bishop(PieceColor piece_color, Position piece_position);

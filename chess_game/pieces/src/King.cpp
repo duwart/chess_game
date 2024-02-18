@@ -1,9 +1,6 @@
 #include "../include/King.hpp"
 
-King::King(PieceColor piece_color, Position piece_position) : Piece(piece_color, piece_position, PieceType::KING)
-{
-    bool in_check_ = false;
-}
+King::King(PieceColor piece_color, Position piece_position) : Piece(piece_color, piece_position, PieceType::KING) {}
 
 King::~King() {}
 
@@ -21,13 +18,4 @@ bool King::canMove(Position destination) const
         return true;
 
     return false;
-}
-
-bool King::isInCheck()
-{
-    return in_check_;
-}
-void King::setInCheck(bool in_check)
-{
-    King::in_check_ = in_check;
 }

@@ -9,7 +9,7 @@ Board::~Board() {}
 
 void Board::setInitalConfiguration()
 {
-    for (int16_t board_column = 0; board_column < BOARD_SIZE; board_column++)
+    for (int8_t board_column = 0; board_column < BOARD_SIZE; board_column++)
     {
         addPieceToBoard(PieceColor::WHITE, PieceType::PAWN, Position{6, board_column});
         addPieceToBoard(PieceColor::BLACK, PieceType::PAWN, Position{1, board_column});
@@ -59,58 +59,60 @@ void Board::addPieceToBoard(PieceColor color, PieceType type, Position position_
     case PieceType::ROOK:
         configuration[position_on_board.row][position_on_board.column] = std::make_shared<Rook>(color, position_on_board);
         break;
+    default:
+        break;
     }
 }
 
-void Board::updateBoard(Position actual_position, Position destination_position)
+bool Board::updateBoard(Position actual_position, Position destination_position, PieceColor current_player)
 {
+    if (hasPieceInPosition(actual_position))
+    {
+        if (current_player != configuration[actual_position.row][actual_position.column]->getPieceColor())
+        {
+            return false;
+        }
+    }
+
     if (isValidMove(actual_position, destination_position))
     {
-        configuration[destination_position.row][destination_position.column] = configuration[actual_position.row][actual_position.column];
-        configuration[actual_position.row][actual_position.column] = nullptr;
-        configuration[destination_position.row][destination_position.column]->setPosition(destination_position);
+        {
+            configuration[destination_position.row][destination_position.column] = std::move(configuration[actual_position.row][actual_position.column]);
+            configuration[actual_position.row][actual_position.column] = nullptr;
+            configuration[destination_position.row][destination_position.column]->setPosition(destination_position);
+            Piece::printConfigurationBoard();
+        }
+
+        Position king_position = current_player == PieceColor::WHITE ? white_king_->getPiecePosition() : black_king_->getPiecePosition();
+        if (this->isKingInCheck(king_position, current_player))
+        {
+            {
+                configuration[actual_position.row][actual_position.column] = std::move(configuration[destination_position.row][destination_position.column]);
+                configuration[destination_position.row][destination_position.column] = nullptr;
+                configuration[actual_position.row][actual_position.column]->setPosition(actual_position);
+                Piece::printConfigurationBoard();
+            }
+            return false;
+        }
 
         if (hasPieceInPosition(destination_position))
         {
+
             PieceType current_piece_type = configuration[destination_position.row][destination_position.column]->getPieceType();
-            PieceColor current_piece_color = configuration[destination_position.row][destination_position.column]->getPieceColor();
             if (current_piece_type == PieceType::PAWN)
             {
                 this->promotePawn(configuration[destination_position.row][destination_position.column]);
             }
-            if (current_piece_type == PieceType::KING)
-            {
-                if (current_piece_color == PieceColor::WHITE)
-                {
-                    white_king_->setInCheck(false);
-                }
-                else
-                {
-                    black_king_->setInCheck(false);
-                }
-            }
-            if (current_piece_color == PieceColor::BLACK)
-            {
-                if (canMoveToPosition(destination_position, white_king_->getPiecePosition()))
-                {
-                    white_king_->setInCheck(true);
-                    std::cout << "WHITE KING IS IN CHECK!" << std::endl;
-                }
-            }
-            else
-            {
-                if (canMoveToPosition(destination_position, black_king_->getPiecePosition()))
-                {
-                    black_king_->setInCheck(true);
-                    std::cout << "BLACK KING IS IN CHECK!" << std::endl;
-                }
-            }
         }
+        return true;
     }
+
+    return false;
 }
 
-bool Board::isValidMove(Position actual_position, Position destination_position)
+bool Board::isValidMove(Position actual_position, Position destination_position) const
 {
+
     if (!hasPieceInPosition(actual_position))
         return false;
 
@@ -118,60 +120,19 @@ bool Board::isValidMove(Position actual_position, Position destination_position)
     bool ret = true;
 
     ret = ret && canMoveToPosition(actual_position, destination_position);
-
     if (hasPieceInPosition(destination_position))
         ret = ret && configuration[destination_position.row][destination_position.column]->getPieceColor() != configuration[actual_position.row][actual_position.column]->getPieceColor();
-
-    if (configuration[actual_position.row][actual_position.column]->getPieceType() == PieceType::KING)
-        ret = ret && this->isKingInCheck(destination_position, color_piece);
-
-    if (white_king_->isInCheck() && !white_king_->getPiecePosition().isEqual(actual_position))
-    {
-        if (!this->isKingInCheck(destination_position, PieceColor::WHITE))
-            return false;
-    }
-
-    if (black_king_->isInCheck() == true && !black_king_->getPiecePosition().isEqual(actual_position))
-    {
-        if (!this->isKingInCheck(destination_position, PieceColor::BLACK))
-            return false;
-    }
     return ret;
 }
 
-bool Board::canMoveToPosition(Position actual_position, Position destination_position)
+bool Board::canMoveToPosition(Position actual_position, Position destination_position) const
 {
-    if (!configuration[actual_position.row][actual_position.column]->canMove(destination_position))
-    {
-        return false;
-    }
-
-    // BUG IN THIS CODE
-    // int x = actual_position.row > destination_position.row ? -1 : 1;
-    // int y = actual_position.column > destination_position.column ? -1 : 1;
-    // short actual_row = actual_position.row;
-    // short actual_column = actual_position.column;
-    // auto actual_color = configuration[actual_position.row][actual_position.column]->getPieceColor();
-    // while (actual_row != destination_position.row)
-    // {
-    //     while (actual_column != destination_position.column)
-    //     {
-    //         if (hasPieceInPosition(Position{actual_row, actual_column}))
-    //         {
-    //             if (configuration[actual_row][actual_column]->getPieceColor() != actual_color)
-    //                 return true;
-    //             return false;
-    //         }
-    //         actual_column = actual_column + y;
-    //     }
-    //     actual_row = actual_row + x;
-    // }
-
-    return true;
+    return configuration[actual_position.row][actual_position.column]->canMove(destination_position);
 }
 
-bool Board::isKingInCheck(Position destination_position, PieceColor king_color)
+bool Board::isKingInCheck(Position destination_position, PieceColor king_color) const
 {
+
     Position _pos;
     for (int i = 0; i < BOARD_SIZE; i++)
     {
@@ -185,17 +146,16 @@ bool Board::isKingInCheck(Position destination_position, PieceColor king_color)
                 {
                     if (canMoveToPosition(_pos, destination_position))
                     {
-                        std::cout << "CHECK!" << std::endl;
-                        return false;
+                        return true;
                     }
                 }
             }
         }
     }
-    return true;
+    return false;
 }
 
-bool Board::hasPieceInPosition(Position position)
+bool Board::hasPieceInPosition(Position position) const
 {
     if (configuration[position.row][position.column] == nullptr)
         return false;
@@ -214,87 +174,45 @@ void Board::promotePawn(std::shared_ptr<Piece> pawn)
         if (var == "B")
         {
             configuration[pawn->getPiecePosition().row][pawn->getPiecePosition().column] = std::make_shared<Bishop>(pawn->getPieceColor(), pawn->getPiecePosition());
+            return;
         }
-        else if (var == "N")
+
+        if (var == "N")
         {
             configuration[pawn->getPiecePosition().row][pawn->getPiecePosition().column] = std::make_shared<Knight>(pawn->getPieceColor(), pawn->getPiecePosition());
+            return;
         }
-        else if (var == "R")
+
+        if (var == "R")
         {
             configuration[pawn->getPiecePosition().row][pawn->getPiecePosition().column] = std::make_shared<Rook>(pawn->getPieceColor(), pawn->getPiecePosition());
+            return;
         }
-        else
+
+        if (var == "Q")
         {
             configuration[pawn->getPiecePosition().row][pawn->getPiecePosition().column] = std::make_shared<Queen>(pawn->getPieceColor(), pawn->getPiecePosition());
+            return;
         }
     }
 }
 
-void Board::printBoard()
+bool Board::isCheckMate(PieceColor current) const
 {
-    WORD Attributes = 0;
-    std::cout << std::endl;
-    std::cout << "    a  b  c  d  e  f  g  h " << std::endl;
-    for (int row = 0; row < BOARD_SIZE; row++)
+    Position pos = current == PieceColor::WHITE ? white_king_->getPiecePosition() : black_king_->getPiecePosition();
+
+    bool ret = true;
+
+    for (int i = -1; i <= 1; i++)
     {
-        std::cout << (8 - row) << " |";
-        for (int column = 0; column < BOARD_SIZE; column++)
+        for (int j = -1; j <= 1; j++)
         {
-            if (configuration[row][column])
+            if (((pos.row + i > 0) && (pos.row + i < BOARD_SIZE)) && ((pos.column + j > 0) && (pos.column + j < BOARD_SIZE)))
             {
-                if (configuration[row][column]->getPieceColor() == PieceColor::BLACK)
-                {
-                    setConsoleColour(&Attributes, FOREGROUND_INTENSITY | FOREGROUND_RED);
-                    std::cout << " " << typeToString(configuration[row][column]->getPieceType()) << " ";
-                    resetConsoleColour(Attributes);
-                }
-                else
-                {
-                    std::cout << " " << typeToString(configuration[row][column]->getPieceType()) << " ";
-                }
-            }
-            else
-            {
-                std::cout << " _ ";
+                ret = ret && isKingInCheck({int8_t(pos.row + i), int8_t(pos.column + j)}, current);
             }
         }
-        std::cout << "|" << std::endl;
     }
-    std::cout << std::endl;
-}
 
-void Board::setConsoleColour(WORD *Attributes, DWORD Colour)
-{
-    CONSOLE_SCREEN_BUFFER_INFO Info;
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-    GetConsoleScreenBufferInfo(hStdout, &Info);
-    *Attributes = Info.wAttributes;
-    SetConsoleTextAttribute(hStdout, Colour);
-}
-
-void Board::resetConsoleColour(WORD Attributes)
-{
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Attributes);
-}
-
-std::string Board::typeToString(PieceType type)
-{
-    switch (type)
-    {
-    case PieceType::BISHOP:
-        return "B";
-    case PieceType::KING:
-        return "K";
-    case PieceType::KNIGHT:
-        return "N";
-    case PieceType::PAWN:
-        return "P";
-    case PieceType::QUEEN:
-        return "Q";
-    case PieceType::ROOK:
-        return "R";
-
-    default:
-        return "_";
-    }
+    return ret;
 }

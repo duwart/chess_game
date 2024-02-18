@@ -1,33 +1,13 @@
 #pragma once
-#include <utility> // make_pair, pair
+
+#include <iostream>
+#include <utility>
+
+#include "PieceColor.hpp"
+#include "PieceType.hpp"
+#include "Position.hpp"
 
 const int BOARD_SIZE = 8;
-
-enum class PieceColor
-{
-    BLACK,
-    WHITE
-};
-
-enum class PieceType
-{
-    BISHOP,
-    KING,
-    KNIGHT,
-    PAWN,
-    QUEEN,
-    ROOK
-};
-
-struct Position
-{
-    int16_t row;
-    int16_t column;
-    bool isEqual(Position pos)
-    {
-        return (row == pos.row) && (column == pos.column);
-    }
-};
 
 class Piece
 {
@@ -40,12 +20,13 @@ protected:
     void setColor(PieceColor piece_color);
 
 public:
+    static void printConfigurationBoard(); // for debug purpose
     Piece(PieceColor piece_color, Position piece_position, PieceType piece_type);
-    virtual ~Piece() = default;
-
-    virtual bool canMove(Position destination) const = 0;
-    PieceType getPieceType();
-    PieceColor getPieceColor();
-    Position getPiecePosition();
+    virtual ~Piece();
     void setPosition(Position position);
+    virtual bool canMove(Position destination) const = 0;
+    PieceType getPieceType() const;
+    PieceColor getPieceColor() const;
+    Position getPiecePosition() const;
+    friend std::ostream &operator<<(std::ostream &cout, const Piece &piece);
 };

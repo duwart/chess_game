@@ -1,7 +1,8 @@
 #pragma once
+
 #include "Piece.hpp"
 
-class Rook : public Piece
+class Rook final : public Piece
 {
 public:
     Rook(PieceColor piece_color, Position piece_position);
@@ -10,6 +11,6 @@ public:
     bool canMove(Position destination) const override;
 
 private:
-    bool isInHorizontalRange(int16_t pos_column) const;
-    bool isInVerticalRange(int16_t pos_row) const;
+    bool isInHorizontalRange(int8_t pos_column) const;
+    bool isInVerticalRange(int8_t pos_row) const;
 };

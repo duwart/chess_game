@@ -1,7 +1,8 @@
 #pragma once
+
 #include "Piece.hpp"
 
-class Pawn : public Piece
+class Pawn final : public Piece
 {
 private:
     bool isFirstMove() const;

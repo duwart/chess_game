@@ -9,6 +9,25 @@ Piece::Piece(PieceColor piece_color, Position piece_position, PieceType piece_ty
     configuration_board[piece_position.row][piece_position.column] = true;
 }
 
+Piece::~Piece()
+{
+    configuration_board[piece_position_.row][piece_position_.column] = false;
+}
+
+void Piece::printConfigurationBoard()
+{
+    std::cout << "=============================================================" << std::endl;
+    for (int i = 0; i < BOARD_SIZE; i++)
+    {
+        for (int j = 0; j < BOARD_SIZE; j++)
+        {
+            std::cout << configuration_board[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << "=============================================================" << std::endl;
+}
+
 void Piece::setPosition(Position position)
 {
     configuration_board[piece_position_.row][piece_position_.column] = false;
@@ -17,17 +36,17 @@ void Piece::setPosition(Position position)
     piece_position_ = position;
 }
 
-PieceType Piece::getPieceType()
+PieceType Piece::getPieceType() const
 {
     return piece_type_;
 }
 
-PieceColor Piece::getPieceColor()
+PieceColor Piece::getPieceColor() const
 {
     return piece_color_;
 }
 
-Position Piece::getPiecePosition()
+Position Piece::getPiecePosition() const
 {
     return piece_position_;
 }

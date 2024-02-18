@@ -5,6 +5,7 @@ project(Chess_Game "CXX")
 file(GLOB_RECURSE sources
     "${CMAKE_CURRENT_SOURCE_DIR}/chess_game/pieces/src/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/chess_game/board/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/chess_game/game/src/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/chess_game/main.cpp"
 )
 
@@ -14,6 +15,7 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/chess_game/pieces/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/chess_game/board/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/chess_game/game/include"
 )
 
 set_target_properties(${PROJECT_NAME}

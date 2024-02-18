@@ -1,10 +1,12 @@
 #pragma once
-#include "Piece.hpp"
+
+#include <memory>
+
 #include "../include/Rook.hpp"
 #include "../include/Bishop.hpp"
-#include <memory> // make_shared
+#include "Piece.hpp"
 
-class Queen : public Piece
+class Queen final : public Piece
 {
 private:
     std::shared_ptr<Rook> move_rook;

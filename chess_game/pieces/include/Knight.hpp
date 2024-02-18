@@ -1,7 +1,7 @@
 #pragma once
 #include "Piece.hpp"
 
-class Knight : public Piece
+class Knight final : public Piece
 {
 public:
     Knight(PieceColor piece_color, Position piece_position);
